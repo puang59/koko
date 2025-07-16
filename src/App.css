@@ -1,3 +1,6 @@
+@import "tailwindcss/theme" layer(theme);
+@import "tailwindcss/utilities" layer(utilities);
+
 * {
   margin: 0;
   padding: 0;
@@ -6,21 +9,91 @@
 
 body {
   background: transparent;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Inter",
+    sans-serif;
   overflow: hidden;
+  user-select: none;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  color: white;
 }
 
 main {
-  width: 100vw;
-  height: 100vh;
-  background: transparent;
+  align-items: center;
+  text-align: center;
   padding: 20px;
+  background: rgba(0, 0, 0, 0.8);
+  border-radius: 15px;
+  backdrop-filter: blur(10px);
+  max-width: 450px;
+  margin: 0 auto;
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  color: white;
+  gap: 15px;
+}
 
-  font-weight: 500;
-  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
+h1 {
+  margin: 0;
+  font-size: 24px;
+  font-weight: 600;
+}
+
+input {
+  width: 100%;
+  max-width: 400px;
+  padding: 10px;
+  border-radius: 10px;
+  font-size: 15px;
+  border: none;
+  outline: none;
+}
+
+button {
+  transition: all 0.15s ease;
+  width: 100%;
+  padding: 12px;
+  border-radius: 10px;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  background-color: #484848;
+  color: white;
+  font-size: 15px;
+}
+
+/* Input field enhancements */
+input::placeholder {
+  transition: opacity 0.2s ease;
+}
+
+input:focus::placeholder {
+  opacity: 0.6;
+}
+
+/* Keyboard shortcut styling */
+kbd {
+  font-family: "SF Mono", "Monaco", "Inconsolata", "Roboto Mono", monospace;
+  font-size: 0.75em;
+  letter-spacing: 0.025em;
+}
+
+/* Loading spinner */
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-spin {
+  animation: spin 1s linear infinite;
+}
+
+/* Selection styling */
+::selection {
+  background: rgba(115, 115, 115, 0.3);
+}
+
+::-moz-selection {
+  background: rgba(115, 115, 115, 0.3);
 }
