@@ -1,5 +1,5 @@
 import { invoke } from "@tauri-apps/api/core";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { register, unregister } from "@tauri-apps/plugin-global-shortcut";
 import { generateResponse } from "./actions/llm";
 import ResponseSection from "./components/ResponseSection";
@@ -7,7 +7,26 @@ import ResponseSection from "./components/ResponseSection";
 function App() {
   const [inputValue, setInputValue] = useState("");
   const [response, setResponse] = useState("");
+  const [isCopied, setIsCopied] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+
+  const handleCopyResponse = useCallback(async () => {
+    if (!response.trim()) {
+      console.log("No response to copy");
+      return;
+    }
+
+    try {
+      await navigator.clipboard.writeText(response);
+      console.log("Response copied to clipboard!");
+      setIsCopied(true);
+      setTimeout(() => {
+        setIsCopied(false);
+      }, 2000);
+    } catch (error) {
+      console.error("Failed to copy to clipboard");
+    }
+  }, [response]);
 
   useEffect(() => {
     console.log("Loading state: ", isLoading);
@@ -58,6 +77,15 @@ function App() {
             }
           }
         );
+
+        await register(
+          "CmdOrCtrl+Shift+C",
+          async (event: { state: string }) => {
+            if (event.state === "Pressed") {
+              await handleCopyResponse();
+            }
+          }
+        );
       } catch (error) {
         console.error("Failed to register global shortcut:", error);
       }
@@ -67,12 +95,16 @@ function App() {
 
     return () => {
       unregister("CmdOrCtrl+Shift+U");
+      unregister("CmdOrCtrl+Shift+C");
     };
-  }, []);
+  }, [handleCopyResponse]);
 
   return (
     <main>
-      {isLoading ? <p>Thinking...</p> : <ResponseSection response={response} />}
+      {isLoading && <p>Thinking...</p>}
+      {!isLoading && response && (
+        <ResponseSection response={response} isCopied={isCopied} />
+      )}
       <input
         type="text"
         value={inputValue}
