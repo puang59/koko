@@ -1,10 +1,17 @@
 import { invoke } from "@tauri-apps/api/core";
 import { useEffect, useState } from "react";
 import { register, unregister } from "@tauri-apps/plugin-global-shortcut";
+import { generateResponse } from "./actions/llm";
+import ResponseSection from "./components/ResponseSection";
 
 function App() {
   const [inputValue, setInputValue] = useState("");
+  const [response, setResponse] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    console.log("Loading state: ", isLoading);
+  }, [isLoading]);
 
   const handleToggle = async () => {
     try {
@@ -16,18 +23,19 @@ function App() {
 
   const handleSubmit = async () => {
     if (!inputValue.trim()) return;
+    let response: string = "";
 
-    setIsLoading(true);
     try {
-      // Your submit logic here
-      console.log("Submitting:", inputValue);
-      // Clear input after successful submit
+      setIsLoading(true);
+      response = await generateResponse(inputValue);
       setInputValue("");
     } catch (error) {
       console.error("Failed to submit:", error);
     } finally {
       setIsLoading(false);
     }
+
+    setResponse(response);
   };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
@@ -64,7 +72,7 @@ function App() {
 
   return (
     <main>
-      <h1>TARS</h1>
+      {isLoading ? <p>Thinking...</p> : <ResponseSection response={response} />}
       <input
         type="text"
         value={inputValue}
@@ -74,17 +82,6 @@ function App() {
         className="main-input"
         autoFocus
       />
-
-      <button onClick={handleSubmit} disabled={!inputValue.trim() || isLoading}>
-        {isLoading ? (
-          <div className="loading">
-            <div className="spinner"></div>
-            <span>Sending...</span>
-          </div>
-        ) : (
-          "Send"
-        )}
-      </button>
     </main>
   );
 }
