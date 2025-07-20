@@ -1,7 +1,7 @@
 import { invoke } from "@tauri-apps/api/core";
 import { useCallback, useEffect, useState } from "react";
 import { register, unregister } from "@tauri-apps/plugin-global-shortcut";
-import { generateResponse } from "./actions/llm";
+import { sendMessage } from "./actions/llm";
 import ResponseSection from "./components/ResponseSection";
 
 function App() {
@@ -46,7 +46,7 @@ function App() {
 
     try {
       setIsLoading(true);
-      response = await generateResponse(inputValue);
+      response = await sendMessage(inputValue);
       setInputValue("");
     } catch (error) {
       console.error("Failed to submit:", error);

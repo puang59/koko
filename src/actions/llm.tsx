@@ -1,22 +1,40 @@
-import { createGoogleGenerativeAI } from "@ai-sdk/google";
-import { generateText } from "ai";
+import { invoke } from "@tauri-apps/api/core";
+import { ConversationManager } from "../utils/conversationManager";
+import { textPrompt } from "../utils/prompts";
 
-const google = createGoogleGenerativeAI({
-  apiKey: import.meta.env.VITE_GOOGLE_API_KEY,
-});
+const conversationManager = new ConversationManager();
 
-export async function generateResponse(prompt: string) {
-  prompt = `You are a helpful assistant named tars. keep your answers short, clear, and straight to the point. when needed, simplify complex concepts. do not add extra explanation unless asked. speak like a human, not like a robot. be friendly but not overly casual. avoid unnecessary filler. if the user asks for code, give only the necessary code snippet without extra comments unless requested.
+export async function sendMessage(userInput: string) {
+  conversationManager.addMessage("user", userInput);
 
-  When asked to rewrite or rephrase things like mail or tweet for example, do not write under " or ' mark and write it straight. Write an improved version and prolong a little and make sure you dont make any grammatical errors.
+  const history = conversationManager.getHistory();
 
-  User: ${prompt}
-  Tars:
-  `;
-  const { text } = await generateText({
-    model: google("gemini-2.5-flash-lite-preview-06-17"),
-    prompt: prompt,
-  });
+  const messages = history.map((msg) => ({
+    role: msg.role === "tars" ? "model" : msg.role,
+    parts: msg.parts,
+  }));
 
-  return text;
+  const systemInstruction = {
+    role: "model",
+    parts: [
+      {
+        text: textPrompt,
+      },
+    ],
+  };
+
+  const finalMessages = [systemInstruction, ...messages];
+
+  try {
+    const response = await invoke("send_message_to_gemini", {
+      messages: finalMessages,
+    });
+
+    conversationManager.addMessage("tars", response as string);
+
+    return response as string;
+  } catch (error) {
+    console.error("Failed to send message:", error);
+    throw error;
+  }
 }
