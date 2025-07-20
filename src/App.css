@@ -31,6 +31,10 @@ main {
   gap: 15px;
 }
 
+p {
+  line-height: 1.5;
+}
+
 h1 {
   margin: 0;
   font-size: 24px;
@@ -106,6 +110,7 @@ kbd.size-inc {
   text-align: center;
   display: flex;
   justify-content: flex-end;
+  margin-top: 10px;
 }
 
 /* Loading spinner */
@@ -126,4 +131,149 @@ kbd.size-inc {
 
 ::-moz-selection {
   background: rgba(115, 115, 115, 0.3);
+}
+
+/* Markdown Styling - All white text */
+.markdown-p {
+  margin-bottom: 16px;
+  color: white;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.markdown-h1 {
+  font-size: 24px;
+  font-weight: bold;
+  margin-top: 20px;
+  margin-bottom: 12px;
+  color: white;
+}
+
+.markdown-h2 {
+  font-size: 20px;
+  font-weight: bold;
+  margin-top: 20px;
+  margin-bottom: 12px;
+  color: white;
+}
+
+.markdown-h3 {
+  font-size: 18px;
+  font-weight: bold;
+  margin-top: 20px;
+  margin-bottom: 8px;
+  color: white;
+}
+
+.markdown-strong {
+  font-weight: bold;
+  color: white;
+}
+
+.markdown-em {
+  font-style: italic;
+  color: white;
+}
+
+.markdown-ul {
+  list-style-type: disc;
+  list-style-position: outside;
+  margin-left: 24px;
+  margin-bottom: 16px;
+}
+
+.markdown-ol {
+  list-style-type: decimal;
+  list-style-position: outside;
+  margin-left: 24px;
+  margin-bottom: 16px;
+}
+
+.markdown-li {
+  color: white;
+  font-size: 14px;
+  padding-left: 4px;
+  margin-bottom: 4px;
+}
+
+.markdown-code-block {
+  border-radius: 8px;
+  overflow: hidden;
+  margin: 20px 0;
+}
+
+.markdown-pre {
+  padding: 16px;
+  overflow-y: auto;
+  font-size: 14px;
+}
+
+.markdown-code-line {
+  margin-bottom: 4px;
+  display: flex;
+}
+
+.markdown-line-number {
+  color: #666;
+  margin-right: 16px;
+  width: 32px;
+  text-align: right;
+  flex-shrink: 0;
+}
+
+.markdown-code-content {
+  flex: 1;
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+
+.markdown-inline-code {
+  background-color: #333;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 14px;
+  color: white;
+}
+
+.markdown-table-wrapper {
+  overflow-x: auto;
+  margin: 24px 0;
+}
+
+.markdown-table {
+  min-width: 100%;
+  border-collapse: collapse;
+  border: 1px solid #444;
+}
+
+.markdown-thead {
+  background-color: #333;
+}
+
+.markdown-tbody {
+  /* no specific styles */
+}
+
+.markdown-tr {
+  border-bottom: 1px solid #444;
+}
+
+.markdown-tr:hover {
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+.markdown-th {
+  padding: 16px;
+  border: 1px solid #444;
+  font-size: 14px;
+  font-weight: 600;
+  text-align: left;
+  color: white;
+}
+
+.markdown-td {
+  padding: 16px;
+  border: 1px solid #444;
+  font-size: 14px;
+  color: white;
 }

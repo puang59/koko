@@ -1,3 +1,5 @@
+import MarkdownRenderer from "../utils/MarkdownRenderer";
+
 export default function ResponseSection({
   response,
   isCopied,
@@ -7,7 +9,7 @@ export default function ResponseSection({
 }) {
   return (
     <section>
-      <p>{response}</p>
+      <MarkdownRenderer content={response} />
       <div className="copy-shortcut">
         <kbd className={isCopied ? "copied size-inc" : " size-inc"}>⌘</kbd>
         <span> + </span>
