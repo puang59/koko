@@ -24,10 +24,73 @@ export default function MarkdownRenderer({ content }: MarkdownRendererProps) {
         li: ({ children }) => <li className="markdown-li">{children}</li>,
         pre: (props) => {
           const children = props.children as any;
-          const code = children?.props?.children || "";
-          const language =
-            children?.props?.className?.replace("language-", "") ||
-            "javascript";
+
+          // Handle both direct code children and nested code elements
+          let code = "";
+          let language = "javascript";
+
+          // Check if children is an array with a code element
+          if (Array.isArray(children) && children.length > 0) {
+            const codeElement = children[0];
+            if (codeElement?.props?.className) {
+              // Handle both string and array children
+              const childrenContent = codeElement.props.children;
+              if (typeof childrenContent === "string") {
+                code = childrenContent;
+              } else if (Array.isArray(childrenContent)) {
+                // Join array elements into a string
+                code = childrenContent
+                  .map((child) =>
+                    typeof child === "string"
+                      ? child
+                      : child?.props?.children || ""
+                  )
+                  .join("");
+              } else {
+                code = childrenContent || "";
+              }
+              language =
+                codeElement.props.className.replace("language-", "") ||
+                "javascript";
+            }
+          } else if (children?.props?.className) {
+            // This is a code element with className
+            const childrenContent = children.props.children;
+            if (typeof childrenContent === "string") {
+              code = childrenContent;
+            } else if (Array.isArray(childrenContent)) {
+              code = childrenContent
+                .map((child) =>
+                  typeof child === "string"
+                    ? child
+                    : child?.props?.children || ""
+                )
+                .join("");
+            } else {
+              code = childrenContent || "";
+            }
+            language =
+              children.props.className.replace("language-", "") || "javascript";
+          } else if (typeof children === "string") {
+            // Direct string content
+            code = children;
+          } else if (children?.props?.children) {
+            // Nested structure
+            const childrenContent = children.props.children;
+            if (typeof childrenContent === "string") {
+              code = childrenContent;
+            } else if (Array.isArray(childrenContent)) {
+              code = childrenContent
+                .map((child) =>
+                  typeof child === "string"
+                    ? child
+                    : child?.props?.children || ""
+                )
+                .join("");
+            } else {
+              code = childrenContent || "";
+            }
+          }
 
           return (
             <div className="markdown-code-block">

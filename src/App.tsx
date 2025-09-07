@@ -4,6 +4,8 @@ import { register, unregister } from "@tauri-apps/plugin-global-shortcut";
 import { sendMessage } from "./actions/llm";
 import ResponseSection from "./components/ResponseSection";
 
+const globalShortcut = "CmdOrCtrl+Shift+U";
+
 function App() {
   const [inputValue, setInputValue] = useState("");
   const [response, setResponse] = useState("");
@@ -47,6 +49,8 @@ function App() {
     try {
       setIsLoading(true);
       response = await sendMessage(inputValue);
+      console.log("Response received:", response);
+
       setInputValue("");
     } catch (error) {
       console.error("Failed to submit:", error);
@@ -70,7 +74,7 @@ function App() {
     const setupGlobalShortcut = async () => {
       try {
         await register(
-          "CmdOrCtrl+Shift+U",
+          globalShortcut,
           async (event: { state: string }) => {
             if (event.state === "Pressed") {
               await handleToggle();

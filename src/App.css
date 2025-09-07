@@ -7,6 +7,11 @@
   box-sizing: border-box;
 }
 
+/* Reset letter-spacing for code elements */
+.markdown-code-block * {
+  letter-spacing: normal !important;
+}
+
 body {
   background: transparent;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Inter",
@@ -206,6 +211,9 @@ kbd.size-inc {
   padding: 16px;
   overflow-y: auto;
   font-size: 14px;
+  font-family: "SF Mono", "Monaco", "Inconsolata", "Roboto Mono", monospace;
+  letter-spacing: normal;
+  line-height: 1.4;
 }
 
 .markdown-code-line {
@@ -223,8 +231,10 @@ kbd.size-inc {
 
 .markdown-code-content {
   flex: 1;
-  white-space: pre-wrap;
-  word-break: break-all;
+  white-space: pre;
+  word-break: normal;
+  font-family: "SF Mono", "Monaco", "Inconsolata", "Roboto Mono", monospace;
+  letter-spacing: normal;
 }
 
 .markdown-inline-code {
