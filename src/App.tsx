@@ -2,7 +2,7 @@ import { invoke } from "@tauri-apps/api/core";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { register, unregister } from "@tauri-apps/plugin-global-shortcut";
 import { sendMessage } from "./actions/llm";
-import { DivideIcon, FileText, X } from "lucide-react";
+import { FileText, X } from "lucide-react";
 import { writeText } from "@tauri-apps/plugin-clipboard-manager";
 import ResponseSection from "./components/ResponseSection";
 import { fetchClipboard } from "./utils/clipboard";
@@ -150,12 +150,19 @@ function App() {
   return (
     <main>
       {question && (
-        <div style={{
-          marginLeft: "auto",
-        }}>
-          <p className="text-sm bg-zinc-800/70 rounded-md" style={{
-            padding: "6px 10px",
-          }}>{question}</p>
+        <div
+          style={{
+            marginLeft: "auto",
+          }}
+        >
+          <p
+            className="text-sm bg-zinc-800/70 rounded-md"
+            style={{
+              padding: "6px 10px",
+            }}
+          >
+            {question}
+          </p>
         </div>
       )}
       {isLoading && <p>Thinking...</p>}
@@ -184,8 +191,9 @@ function App() {
             backgroundColor: isHovering
               ? "rgba(63, 63, 70, 0.7)"
               : "rgba(39, 39, 42, 0.6)",
-            border: `1px solid ${isHovering ? "rgba(161,161,170,0.8)" : "rgba(113,113,122,0.7)"
-              }`,
+            border: `1px solid ${
+              isHovering ? "rgba(161,161,170,0.8)" : "rgba(113,113,122,0.7)"
+            }`,
             boxShadow: isHovering ? "0 0 0 1px rgba(161,161,170,0.3)" : "none",
             transition:
               "background-color 150ms ease, border-color 150ms ease, box-shadow 150ms ease",
