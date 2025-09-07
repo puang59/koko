@@ -69,7 +69,6 @@ async fn send_message_to_gemini(messages: Vec<Message>) -> Result<String, String
         return Err(format!("API returned error {}: {}", status, response_text));
     }
     
-    // Try to parse the response
     let gemini_response: GeminiResponse = serde_json::from_str(&response_text)
         .map_err(|e| format!("Failed to parse response: {}. Response was: {}", e, response_text))?;
     
@@ -98,7 +97,6 @@ async fn toggle_window(app: tauri::AppHandle) -> Result<(), String> {
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
-    // Load .env file at startup
     dotenv::dotenv().ok();
     
     tauri::Builder::default()
