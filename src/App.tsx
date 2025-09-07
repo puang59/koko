@@ -3,6 +3,8 @@ import { useCallback, useEffect, useState } from "react";
 import { register, unregister } from "@tauri-apps/plugin-global-shortcut";
 import { sendMessage } from "./actions/llm";
 import ResponseSection from "./components/ResponseSection";
+import { fetchClipboard } from "./utils/clipboard";
+import { Copyleft } from "lucide-react";
 
 const globalShortcut = "CmdOrCtrl+Shift+U";
 
@@ -11,6 +13,7 @@ function App() {
   const [response, setResponse] = useState("");
   const [isCopied, setIsCopied] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [context, setContext] = useState("");
 
   const handleCopyResponse = useCallback(async () => {
     if (!response.trim()) {
@@ -36,7 +39,13 @@ function App() {
 
   const handleToggle = async () => {
     try {
+      const clipboardText = await fetchClipboard();
+
       await invoke("toggle_window");
+
+      if (clipboardText.trim()) {
+        setContext(clipboardText);
+      }
     } catch (error) {
       console.error("Failed to toggle window:", error);
     }
@@ -48,7 +57,7 @@ function App() {
 
     try {
       setIsLoading(true);
-      response = await sendMessage(inputValue);
+      response = await sendMessage(context, inputValue);
       console.log("Response received:", response);
 
       setInputValue("");
@@ -73,17 +82,14 @@ function App() {
   useEffect(() => {
     const setupGlobalShortcut = async () => {
       try {
-        await register(
-          globalShortcut,
-          async (event: { state: string }) => {
-            if (event.state === "Pressed") {
-              await handleToggle();
-            }
+        await register(globalShortcut, async (event: { state: string }) => {
+          if (event.state === "Pressed") {
+            await handleToggle();
           }
-        );
+        });
 
         await register(
-          "CmdOrCtrl+Shift+C",
+          "CmdOrCtrl+Shift+V",
           async (event: { state: string }) => {
             if (event.state === "Pressed") {
               await handleCopyResponse();
@@ -99,9 +105,14 @@ function App() {
 
     return () => {
       unregister("CmdOrCtrl+Shift+U");
-      unregister("CmdOrCtrl+Shift+C");
+      unregister("CmdOrCtrl+Shift+V");
     };
   }, [handleCopyResponse]);
+
+  const truncate = (str: string, maxLength: number) => {
+    if (str.length <= maxLength) return str;
+    return str.slice(0, maxLength) + "...";
+  }
 
   return (
     <main>
@@ -109,6 +120,21 @@ function App() {
       {!isLoading && response && (
         <ResponseSection response={response} isCopied={isCopied} />
       )}
+      {context && (
+        <div
+          className="border border-zinc-500"
+          style={{
+            padding: "5px",
+            paddingLeft: "10px",
+            width: "60%",
+            borderRadius: "5px",
+            backgroundColor: "rgba(30, 41, 59, 0.3)",
+          }}
+        >
+          <p className="text-xs">{truncate(context, 30)}</p>
+        </div>
+      )}
+
       <input
         type="text"
         value={inputValue}

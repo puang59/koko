@@ -4,7 +4,7 @@ import { textPrompt } from "../utils/prompts";
 
 const conversationManager = new ConversationManager();
 
-export async function sendMessage(userInput: string) {
+export async function sendMessage(context: string, userInput: string) {
   conversationManager.addMessage("user", userInput);
 
   const history = conversationManager.getHistory();
@@ -18,10 +18,12 @@ export async function sendMessage(userInput: string) {
     role: "model",
     parts: [
       {
-        text: textPrompt,
+        text: textPrompt(context),
       },
     ],
   };
+
+  console.log("System Instruction:", textPrompt(context));
 
   const finalMessages = [systemInstruction, ...messages];
 

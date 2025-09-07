@@ -95,6 +95,7 @@ async fn toggle_window(app: tauri::AppHandle) -> Result<(), String> {
     Ok(())
 }
 
+
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     // Load .env file at startup
