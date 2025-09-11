@@ -119,6 +119,32 @@ kbd.size-inc {
   margin-top: 10px;
 }
 
+/* Scrollable markdown container */
+.markdown-container {
+  max-height: 400px;
+  overflow-y: auto;
+  padding-right: 8px;
+}
+
+/* Custom scrollbar styling */
+.markdown-container::-webkit-scrollbar {
+  width: 6px;
+}
+
+.markdown-container::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 3px;
+}
+
+.markdown-container::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 3px;
+}
+
+.markdown-container::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.5);
+}
+
 /* Loading spinner */
 @keyframes spin {
   to {

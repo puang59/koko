@@ -57,7 +57,6 @@ function App() {
       if (trimmed === lastClearedRef.current) return;
       if (trimmed === context) return;
       if (trimmed && trimmed !== lastClearedContext) {
-        // Accept new context and clear the last-cleared marker so future repeats are allowed
         setContext(trimmed);
         setLastClearedContext("");
         lastAcceptedRef.current = trimmed;
@@ -73,7 +72,7 @@ function App() {
 
     try {
       setIsLoading(true);
-      response = await sendMessage(context, inputValue);
+      response = await sendMessage(context, inputValue)
       console.log("Response received:", response);
 
       setInputValue("");
@@ -123,6 +122,7 @@ function App() {
     // In-app Cmd+C: if window is focused, let Cmd+C copy the response
     const onKeyDown = (e: KeyboardEvent) => {
       const isMac = navigator.platform.toLowerCase().includes("mac");
+
       const isCmd = isMac ? e.metaKey : e.ctrlKey;
       if (isCmd && (e.key === "c" || e.key === "C")) {
         // Only handle when nothing is selected in the input
@@ -191,9 +191,8 @@ function App() {
             backgroundColor: isHovering
               ? "rgba(63, 63, 70, 0.7)"
               : "rgba(39, 39, 42, 0.6)",
-            border: `1px solid ${
-              isHovering ? "rgba(161,161,170,0.8)" : "rgba(113,113,122,0.7)"
-            }`,
+            border: `1px solid ${isHovering ? "rgba(161,161,170,0.8)" : "rgba(113,113,122,0.7)"
+              }`,
             boxShadow: isHovering ? "0 0 0 1px rgba(161,161,170,0.3)" : "none",
             transition:
               "background-color 150ms ease, border-color 150ms ease, box-shadow 150ms ease",

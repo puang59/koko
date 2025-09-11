@@ -9,7 +9,9 @@ export default function ResponseSection({
 }) {
   return (
     <section>
-      <MarkdownRenderer content={response} />
+      <div className="markdown-container">
+        <MarkdownRenderer content={response} />
+      </div>
       <div className="copy-shortcut">
         <kbd className={isCopied ? "copied size-inc" : " size-inc"}>⌘</kbd>
         <span> + </span>
